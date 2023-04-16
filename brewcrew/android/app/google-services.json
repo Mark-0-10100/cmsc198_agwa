@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1086060307691",
+    "project_id": "brew-crew-yttutorial",
+    "storage_bucket": "brew-crew-yttutorial.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086060307691:android:254983ddcdbf2e7a9f8aae",
+        "android_client_info": {
+          "package_name": "com.example.brewcrew"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1086060307691-7kno2sfro51l0snnp6mlmp1dl7u2051g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5Mj2lubozEwnCDi6k8VlYja-rFRs35Mw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1086060307691-7kno2sfro51l0snnp6mlmp1dl7u2051g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
