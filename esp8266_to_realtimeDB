@@ -1,0 +1,87 @@
+// Programmed by: Dleamnor Euraze Cawaling and Mark Anthony Occena for CMSC 198
+// Date Programmed: A.Y. 2022-2023
+// Program Title: pH Water Monitoring System
+// Program Description: This saves data to realtime database
+// Materials needed:
+// Libraries needed:
+// How to use the program:
+
+#include <Wire.h>
+#include <LiquidCrystal.I2C.h>
+
+#include <ESP8266WiFi.h>
+#include <FirebaseESP8266.h>
+
+#define ENABLE_FB_DEBUG true
+
+// First Estate WiFi
+#define WIFI_SSID "GlobeAtHome_d5648_2.4"
+#define WIFI_PASSWORD "3sa9ZpZW"
+
+// SG Studio WiFi
+#define WIFI_SSID "Studio SG 2.4GHZ"
+#define WIFI_PASSWORD "SGStudio_2023"
+
+#define FIREBASE_HOST "https://agwa-trial-space-v1-default-rtdb.asia-southeast1.firebasedatabase.app"
+#define FIREBASE_AUTH "Y7oDCQ3VJGsfp21Iw7IqG0cZf3vpvhSulPrH6pHZ"
+
+FirebaseData firebaseData;
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+const int analogPin = A0;
+
+void setup() {
+  Serial.begin(9600);
+
+  connectToWiFi();
+  connectToFirebase();
+
+  lcd.begin(16,2);
+  lcd.print("pH Sensor");
+}
+
+float readPH(){
+  int rawValue = analogRead(analogPin);
+  float voltage = rawValue * (5.0 / 1023.0);
+  float pH = 3.5 * voltage + 1.5;
+  return pH;
+}
+
+void loop() {
+//  float pHValue = 7.0; // Replace with your pH sensor reading
+  float pHValue = readPH();
+  lcd.setCursor(0,1);
+  lcd.print("pH: ");
+  lcd.print(pHValue);
+  
+  if (Firebase.setFloat(firebaseData, "/pHValue", pHValue)) {
+    Serial.println("pH data sent to Firebase");
+  } else {
+    Serial.println(firebaseData.errorReason());
+    reconnectToFirebase();
+  }
+
+  delay(1000);
+}
+
+void connectToWiFi() {
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.print("Starting to connect");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print("Please Connect...");
+  }
+  Serial.println("\nConnected to WiFi: ");
+  Serial.println(WiFi.localIP());
+}
+
+void connectToFirebase() {
+  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+  Serial.println("\nConnected to Firebase");
+}
+
+void reconnectToFirebase() {
+  Serial.println("\nReconnecting to Firebase");
+  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+  Serial.println("\nConnected to Firebase");
+}
